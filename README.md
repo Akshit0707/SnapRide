@@ -1,64 +1,199 @@
-## 'Rent a Car' application created by React and Google Firebase
-#### Live Demo <a href='https://rentacar-reactjs.vercel.app/' target='_blank'>https://rentacar-reactjs.vercel.app/</a>
-### Modules:
-<ul>
-    <li>
-        ✔️-> React Bootstrap and SASS for responsive development
-    </li>
-    <li>
-        ✔️-> React Router Dom v6 for client and server-side routing
-    </li>
-    <li>
-        ✔️-> React Redux for global state management
-    </li>
-    <li>
-        ✔️-> React Persist for Redux store state to a persistent storage
-    </li>
-    <li>
-        ✔️-> Google Firebase for User Authentication & Firestore Database & File Storage 
-    </li>
-    <li>
-        ✔️-> Sweetalert2 for custom popups
-    </li>
-</ul>
-
-### Rent a Car (Video):
-https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/dfd86330-3573-4435-a012-f0c8cb802e47
-
-### Rent a Car (Screenshot):
-![rent-a-car](https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/33b709f4-e6ca-468a-8c49-c602151f8e70)
+![ezgif-7-03a726b6b6](https://github.com/user-attachments/assets/e949e6e1-f217-40b7-89d4-0d46cc3f165e)
 
 
-### Project Videos:
+# Easydrive : Car-Bike Rentals Application
 
-##### User & Vehicle & Location Management:
-https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/8ee07e78-b8af-4d28-b6ca-3b69a3afb5d3
+Easydrive is a React-based car and bike rental application designed to provide a seamless vehicle rental experience. Users can easily register, log in, browse available vehicles, and make secure bookings through a user-friendly interface.
 
-##### Rentals Management:
-https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/bec58c4b-2427-487a-9495-73b2c7018bf8
+## Features
 
-##### Contact Form Management:
-https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/ad61b577-82c0-4ce8-9eee-7f5ff4ad1368
+- **User Authentication**: Register and log in to access the platform.
+- **Responsive Design**: Seamless browsing on all devices.
+- **Vehicle Booking**: Select desired vehicle, specify rental duration, and proceed to checkout.
+- **Payment Integration**: Secure transactions via Razorpay, offering multiple payment options.
+- **Booking History**: Access details of previous rentals for reference and tracking.
 
-##### Firebase Structure:
-https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/b8ae9740-2c52-417b-a13c-ace34f261c56 
+## Getting Started
 
-### Projects Screenshots:
+### Prerequisites
 
-##### Car Reservation:
-![reservation](https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/1e27d38f-74ba-4018-b64a-fa16c2bc872a)
+- Node.js
+- npm (Node Package Manager)
 
-##### User/Admin Login/Sign-up:
-![login](https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/23a377f2-fc75-44f5-aa83-e24e8e03bb75)
+### Installation
 
-##### My Rentals:
-![rentals](https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/6a1a95f7-4693-40ce-abbe-28af4df24103)
+1. **Clone the Repository**:
 
-##### Cars Management (Admin):
-![cars-management](https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/09c475ce-ebe4-4db7-919f-0d09e6f1f0cd)
+   ```sh
+   git clone https://github.com/ravikant-diwakar/EasyDrive
+   cd easydrive
+   ```
 
-##### Rentals Management (Admin):
-![rentals-management](https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/10f554f2-9936-4526-9d26-93e1ade5feba)
+2. **Install Dependencies**:
 
-##### Vehicle Model Management (Admin):
-![model-management](https://github.com/fbatuhanr/RentaCar-ReactJS/assets/34348780/c7eb16b9-7dab-4995-8acc-0c5d3ee8ee6e)
+   ```sh
+   npm install
+   ```
+
+3. **Configure Firebase**:
+   - Create a Firebase project and set up a web app.
+   - Replace placeholders in `src/config/firebase.js` with your Firebase configuration.
+
+4. **Configure Razorpay**:
+   - Create a Razorpay account and obtain your API keys.
+   - Replace placeholders in the payment integration code with your Razorpay API keys.
+
+5. **Start the Development Server**:
+
+   ```sh
+   npm start
+   ```
+
+6. **Open the Application**:
+
+   Visit [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Firebase Setup
+
+Refer to the [Firebase Setup Documentation](https://firebase.google.com/docs/web/setup?authuser=0&hl=en).
+
+## Payment Integration
+
+Refer to the [Razorpay Documentation](https://razorpay.com/docs/#home-payments).
+
+## Contributing
+
+Contributions are welcome! Follow these steps to contribute:
+
+1. **Fork the Repository**.
+2. **Create a New Branch**:
+
+   ```sh
+   git checkout -b feature/your-feature-name
+   ```
+
+3. **Make Your Changes** and **Commit**:
+
+   ```sh
+   git commit -m "Add feature"
+   ```
+
+4. **Push to the Branch**:
+
+   ```sh
+   git push origin feature/your-feature-name
+   ```
+
+5. **Open a Pull Request** on GitHub.
+
+## Contact
+
+For any queries or feedback, contact us at diwakarr956@gmail.com
+
+## Folder Structure
+
+```plaintext
+├──src
+├── admin
+│   ├── contact-form-manager
+│   │   └── contact-form-manager.jsx
+│   ├── locations-manager
+│   │   └── location-managers.jsx
+│   ├── rentals-manager
+│   │   └── rentals-manager.jsx
+│   ├── users-manager
+│   │   └── users-manager.jsx
+│   ├── vehicles-manager
+│   │   ├── vehicle-brands.jsx
+│   │   ├── vehicle-cars.jsx
+│   │   ├── vehicle-models.jsx
+│   │   └── vehicles-manager.jsx
+│   ├── admin-header.jsx
+│   ├── admin-layout.jsx
+│   └── admin.jsx
+├── assets
+│   └── images
+├── components
+│   ├── general
+│   │   └── general-components.jsx
+│   ├── about-section.jsx
+│   ├── car-offers.jsx
+│   ├── car-search.jsx
+│   ├── contact-section.jsx
+│   ├── customer-reviews.jsx
+│   ├── features-section.jsx
+│   ├── footer.jsx
+│   ├── header.jsx
+│   └── slider.jsx
+├── config
+│   ├── firebase.js
+│   ├── general.js
+│   └── ScrollToTop.js
+├── DATA
+│   ├── data.json
+│   └── data.jsx
+├── dev
+│   ├── index.js
+│   ├── palette.jsx
+│   ├── previews.jsx
+│   └── useInitial.js
+├── guards
+│   ├── AdminGuard.js
+│   ├── AuthGuard.js
+│   └── GuestGuard.js
+├── hooks
+│   ├── useAuthentication.js
+│   └── useFetchData.js
+├── pages
+│   ├── about
+│   │   └── about.jsx
+│   ├── auth
+│   │   ├── login.jsx
+│   │   └── signup.jsx
+│   ├── client
+│   │   └── client.jsx
+│   ├── contact
+│   │   └── contact.jsx
+│   ├── my-rentals
+│   │   └── my-rentals.jsx
+│   ├── services
+│   │   └── services.jsx
+│   └── vehicles
+│       ├── vehicles.jsx
+│       ├── car-detail.jsx
+│       └── home.jsx
+├── redux
+│   ├── app
+│   │   └── store.js
+│   └── features
+│       ├── ReserveSlice.js
+│       └── UserSlice.js
+├── styles
+│   └── style.css
+├── utils
+│   └── demo-content.js
+├── App.js
+├── App.scss
+├── App.test.js
+├── index.css
+├── index.js
+├── reportWebVitals.js
+└── setupTests.js
+```
+
+| 🏍️ | 🚘 |
+|------|------|
+| ![image](https://github.com/user-attachments/assets/65dbda30-f896-4873-9f09-a81286645e1f) | ![image](https://github.com/user-attachments/assets/35b461e2-33ed-4341-934a-e7deee5f6c42) |
+
+
+
+
+| ⛍ | ✔ |
+|---------|--------|
+| ![image](https://github.com/user-attachments/assets/c94033e4-a2d7-4632-944f-6c7052720af7) | ![image](https://github.com/user-attachments/assets/ac31d377-f14c-4b86-8ec4-e8c7a69de8dd) |
+
+
+
+---
+
+**Easydrive** - Simplifying Vehicle Rentals!
