@@ -38,10 +38,26 @@ Easydrive is a React-based car and bike rental application designed to provide a
 3. **Configure Firebase**:
    - Create a Firebase project and set up a web app.
    - Replace placeholders in `src/config/firebase.js` with your Firebase configuration.
+   - Follow the instructions on the [Firebase setup guide](https://firebase.google.com/docs/web/setup?authuser=0&hl=en) to create a project and obtain your Firebase configuration.
+   - Create a `.env` file in the root directory and add your Firebase configuration.
+     ```env
+     REACT_APP_FIREBASE_API_KEY=your_api_key
+     REACT_APP_FIREBASE_AUTH_DOMAIN=your_auth_domain
+     REACT_APP_FIREBASE_PROJECT_ID=your_project_id
+     REACT_APP_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+     REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+     REACT_APP_FIREBASE_APP_ID=your_app_id
+     ```
 
 4. **Configure Razorpay**:
    - Create a Razorpay account and obtain your API keys.
    - Replace placeholders in the payment integration code with your Razorpay API keys.
+   - Follow the [Razorpay documentation](https://razorpay.com/docs/#home-payments) to create an account and obtain your API keys.
+   - Add the Razorpay API keys to your `.env` file.
+     ```env
+     RAZORPAY_KEY_ID=your_key_id
+     RAZORPAY_KEY_SECRET=your_key_secret
+     ```
 
 5. **Start the Development Server**:
 
