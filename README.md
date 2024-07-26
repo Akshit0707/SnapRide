@@ -11,7 +11,7 @@ Easydrive is a React-based car and bike rental application designed to provide a
 - **Responsive Design** : Seamless browsing on all devices.
 - **Vehicle Booking** : Select desired vehicle, specify rental duration, and proceed to checkout.
 - **Payment Integration** : Secure transactions via Razorpay, offering multiple payment options.
-- **Booking History**: Access details of previous rentals for reference and tracking.
+- **Booking History** : Access details of previous rentals for reference and tracking.
 
 ## Getting Started
 
