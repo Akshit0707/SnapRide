@@ -1,7 +1,7 @@
 ![ezgif-7-03a726b6b6](https://github.com/user-attachments/assets/e949e6e1-f217-40b7-89d4-0d46cc3f165e)
 
 
-# Easydrive : Car-Bike Rentals Application
+# EasyDrive : Car-Bike Rentals Application
 
 Easydrive is a React-based car and bike rental application designed to provide a seamless vehicle rental experience. Users can easily register, log in, browse available vehicles, and make secure bookings through a user-friendly interface.
 
