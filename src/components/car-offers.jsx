@@ -81,7 +81,13 @@ const CarOffers = () => {
                                 .map(([key, value]) => {
 
                                 let brand = brands[value.brandId];
-                                let model = Object.values(models).find(i => i.brandId == value.brandId).models[value.modelId];
+                                // let model = Object.values(models).find(i => i.brandId == value.brandId).models[value.modelId];
+                                     // Check if models is defined and contains the brandId, then access models safely
+                  let model =
+                    models && models[value.brandId]
+                      ? models[value.brandId].models &&
+                        models[value.brandId].models[value.modelId]
+                      : null;
                                 return (
                                     <Col xs={6} md={4} className="py-2" key={`offer_${key}`}>
                                         <div className="gallery-box p-2">
