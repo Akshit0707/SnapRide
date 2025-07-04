@@ -1,118 +1,149 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { db, auth } from "../config/firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
-import { clearUserData, setUser } from "../redux/features/UserSlice";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut
+} from "firebase/auth";
+import {
+  setDoc,
+  doc,
+  getDoc
+} from "firebase/firestore";
+import {
+  clearUserData,
+  setUser
+} from "../redux/features/UserSlice";
 
 const useAuthentication = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState(null);
 
-    const dispatch = useDispatch();
-    const [isLoading, setIsLoading] = useState(false);
-    const [message, setMessage] = useState(null);
+  // ✅ Login handler
+  const signInCall = async ({ email, password }) => {
+    setIsLoading(true);
+    try {
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
 
-    const signInCall = async ({email, password}) => {
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
 
-        setIsLoading (true);
-        try {
-            const {user} = await signInWithEmailAndPassword(auth,
-                email,
-                password
-            );
+      let docData;
 
-            const q = query(collection(db, "users"), where("userUID", "==", user.uid));
-            const querySnapshot = await getDocs(q);
-            const docData = querySnapshot.docs[0].data();
+      if (!userSnap.exists()) {
+        docData = {
+          userUID: user.uid,
+          email: email,
+          role: "user",
+          name: "Anonymous" // fallback
+        };
+        await setDoc(userRef, docData);
+      } else {
+        docData = userSnap.data();
+      }
 
-            const userData = {...user, ...docData};
+      const userData = {
+        uid: user.uid,
+        email: docData.email,
+        role: docData.role,
+        name: docData.name || "User"
+      };
 
-            dispatch(setUser(userData));
+      dispatch(setUser(userData));
 
-            setMessage({
-                content: "You are successfully logged in!",
-                isError: false
-            });
-        }
-        catch (err) {
-            console.log(err);
+      setMessage({
+        content: "You are successfully logged in!",
+        isError: false
+      });
+    } catch (err) {
+      console.error(err);
+      setMessage({
+        content: "Incorrect email or password, please try again!",
+        isError: true
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-            setMessage({
-                content: "Incorrect mail or password, please try again!",
-                isError: true
-            });
+  // ✅ Signup handler
+  const signUpCall = async ({ email, password, role, name, age, mobile, address }) => {
+  setIsLoading(true);
+  try {
+    const { user } = await createUserWithEmailAndPassword(auth, email, password);
 
-        } finally {
-            setIsLoading (false);
-        }
+    // Build Firestore doc data
+    const docData = {
+      userUID: user.uid,
+      email,
+      role,
     };
 
-    const signUpCall = async ({email, password}) => {
+    // Only add user-specific fields if role is 'user'
+    if (role === "user") {
+      docData.name = name;
+      docData.age = age;
+      docData.mobile = mobile;
+      docData.address = address;
+    }
 
-        setIsLoading (true);
+    // Save to Firestore
+    await setDoc(doc(db, "users", user.uid), docData);
 
-        try {
-            const {user} = await createUserWithEmailAndPassword(auth,
-                email,
-                password
-            );
+    const userData = { ...user, ...docData };
+    dispatch(setUser(userData));
 
-            const docData = {
-                userUID: user.uid,
-                email: email,
-                role: "user"
-            };
+    setMessage({
+      content: "You are successfully signed up!",
+      isError: false,
+    });
 
-            await addDoc(collection(db, "users"), docData);
+    // Optional: redirect after signup based on role
+    navigate(role === "admin" ? "/admin" : "/user");
 
-            const userData = {...user, ...docData};
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    setMessage({
+      content: err.message,
+      isError: true,
+    });
+    return { success: false };
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-            dispatch(setUser(userData));
 
-            setMessage({
-                content: "You are successfully signed up!",
-                isError: false
-            });
+  // ✅ Logout handler
+  const signOutCall = async () => {
+    setIsLoading(true);
+    try {
+      await signOut(auth);
+      dispatch(clearUserData());
 
-        } catch (err) {
+      setMessage({
+        content: "You are successfully logged out!",
+        isError: false
+      });
 
-            console.log(err);
-            setMessage({
-                content: err.message,
-                isError: true
-            });
-        }
-        finally {
-            setIsLoading(false);
-        }
-    };
+      navigate("/login");
+    } catch (err) {
+      console.log(err);
+      setMessage({
+        content: err.message,
+        isError: true
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    const signOutCall = async () => {
-
-        setIsLoading (true);
-
-        try {
-            await signOut (auth);
-            dispatch(clearUserData());
-
-            setMessage({
-                content: "You are successfully logged out!",
-                isError: false
-            });
-        }
-        catch (err) {
-            console.log(err);
-
-            setMessage({
-                content: err,
-                isError: true
-            });
-        }
-        finally {
-            setIsLoading (false);
-        }
-    };
-
-    return {isLoading, message, signInCall, signUpCall, signOutCall};
-}
+  return { isLoading, message, signInCall, signUpCall, signOutCall };
+};
 
 export default useAuthentication;

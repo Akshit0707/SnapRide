@@ -1,132 +1,183 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Button, Form, InputGroup} from "react-bootstrap";
-import {doc, updateDoc} from "firebase/firestore";
-import {db} from "../../config/firebase";
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, Form, InputGroup, Card, Row, Col, Table, Spinner } from "react-bootstrap";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../config/firebase";
 import Swal from "sweetalert2";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
+import { fetchUsers } from "../../hooks/useFetchData";
+import { UserRoles, isAdmin } from "../../config/general";
 
-import {fetchUsers} from "../../hooks/useFetchData";
-import {loadingContent} from "../../components/general/general-components";
-
-import {UserRoles, isAdmin} from "../../config/general";
+const LoadingContent = () => (
+    <div className="d-flex justify-content-center align-items-center py-5">
+        <Spinner animation="border" role="status" variant="success">
+            <span className="visually-hidden">Loading users...</span>
+        </Spinner>
+        <p className="ms-3 mb-0 text-muted">Loading users...</p>
+    </div>
+);
 
 const UsersManager = () => {
+    const user = useSelector(({ UserSlice }) => UserSlice.user);
 
-    const user = useSelector(({UserSlice}) => UserSlice.user);
+    const [isLoading, setIsLoading] = useState(true);
+    const [users, setUsers] = useState(null); // This will now store an object: { userId1: userObj1, userId2: userObj2 }
 
-    const [isLoading, setIsLoading] = useState(false);
-
-    const [users, setUsers] = useState(null);
-
-    const refs = useRef([]);
+    const refs = useRef({});
 
     useEffect(() => {
+        const getUsers = async () => {
+            setIsLoading(true);
+            try {
+                const response = await fetchUsers();
+                // *** IMPORTANT CHANGE HERE: Transform array to object ***
+                const usersObject = response.reduce((acc, currentUser) => {
+                    acc[currentUser.id] = currentUser;
+                    return acc;
+                }, {});
+                setUsers(usersObject);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Failed to load users. Please try again."
+                });
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-        fetchUsers().then(response => setUsers(response));
+        getUsers();
+    }, []);
 
-    }, [])
 
+    const handleUpdateButton = async (userId, userEmail, currentRole) => {
+        // Using the safe access for the ref's value
+        let newRole = refs.current[userId] ? refs.current[userId].value : undefined;
 
-    const handleUpdateButton = async key => {
-
-        let role = refs.current[key].value;
+        if (!newRole || newRole === currentRole) {
+            Swal.fire({
+                icon: "info",
+                title: "No Change",
+                text: "Please select a new role to update."
+            });
+            return;
+        }
 
         setIsLoading(true);
 
-        const userRef = doc(db, "users", users[key].id);
+        const userRef = doc(db, "users", userId);
 
-        updateDoc(userRef, {role})
-            .then(() => {
-                // setIsLoading(false);
-                Swal.fire({
-                    title: "Good job!",
-                    text: "All changes saved!",
-                    icon: "success",
-                    showConfirmButton: true
-                }).then((result) => {
-                    if (result.isConfirmed)
-                        window.location.reload()
-                });
-            })
-            .catch(err => {
-                console.log(err);
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Something went wrong!"
+        try {
+            await updateDoc(userRef, { role: newRole });
+            Swal.fire({
+                title: "Success!",
+                text: `Role for ${userEmail} updated to ${UserRoles[newRole]}!`,
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                setUsers(prevUsers => {
+                    if (!prevUsers) return null;
+                    const updatedUsers = { ...prevUsers };
+                    // Now updatedUsers[userId] will correctly reference the user object
+                    updatedUsers[userId] = { ...updatedUsers[userId], role: newRole }; // Create new object for immutability
+                    return updatedUsers;
                 });
             });
-
-    }
+        } catch (err) {
+            console.error("Error updating user role:", err);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong while updating the role!"
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
-        <div>
-            <h1>Users Management</h1>
-                <div className="d-grid gap-2 p-3">
-                    {
-                        users && !isLoading
-                            ?
-                            <>
-                                <h2>Edit Users</h2>
-                                {
-                                    Object.entries(users).map(([key, value]) => {
+        <div className="users-manager-container">
+            <h1 className="mb-4 text-center admin-panel-heading">Users Management</h1>
 
-                                        let isAnAdmin = isAdmin(value.role);
-                                        let isCurrentUser = value.email == user.email;
+            <Card className="shadow-sm p-3 p-md-4 mb-5">
+                <Card.Body>
+                    <Card.Title as="h2" className="mb-4 text-center admin-sub-heading">Edit User Roles</Card.Title>
 
-                                        /* admin@batuhanozturk.com */
-                                        let isDefaultAdmin = value.userUID == "3M9LJ5nz2PTj5I4OtHffMoa2oAD3"
-                                        /* user@batuhanozturk.com */
-                                        let isDefaultUser = value.userUID == "3fDiITFpHLf4Vgio1VBN0jUZGy52"
-                                        return (
-                                            <div key={key} className="my-2">
-                                                <InputGroup>
-                                                    <Form.Control
-                                                        type="text"
-                                                        name="userEmail"
-                                                        value={value.email}
-                                                        placeholder="User email..."
-                                                        disabled={true}
-                                                        /*
-                                                        ref={event => {
-                                                            refs.current[key] = refs.current[key] || [];
-                                                            refs.current[key][0] = event;
-                                                        }}
-                                                        */
-                                                    />
-                                                    <Form.Select
-                                                        name="userRole"
-                                                        defaultValue={value.role}
-                                                        disabled={(isAnAdmin && isCurrentUser) || isDefaultAdmin || isDefaultUser}
-                                                        ref={event => refs.current[key] = event}
-                                                    >
-                                                        <option value="">Select a role...</option>
-                                                        {
-                                                            Object.keys(UserRoles).map(key => (
-                                                                <option key={key} value={key}>
-                                                                    {UserRoles[key]}
+                    {isLoading ? (
+                        <LoadingContent />
+                    ) : (
+                        users && Object.keys(users).length > 0 ? (
+                            <div className="table-responsive">
+                                <Table striped bordered hover responsive className="users-table align-middle">
+                                    <thead className="table-dark">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Email</th>
+                                            <th>Current Role</th>
+                                            <th>New Role</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {/* *** IMPORTANT CHANGE HERE: Iterate over Object.values(users) *** */}
+                                        {Object.values(users).map((value, index) => { // 'value' is now the user object directly
+                                            const isAnAdmin = isAdmin(value.role);
+                                            const isCurrentUser = value.email === user.email;
+                                            const isDefaultAdmin = value.userUID === "3M9LJ5nz2PTj5I4OtHffMoa2oAD3";
+                                            const isDefaultUser = value.userUID === "3fDiITFpHLf4Vgio1VBN0jUZGy52";
+
+                                            const isDisabled = (isAnAdmin && isCurrentUser) || isDefaultAdmin || isDefaultUser;
+
+                                            return (
+                                                <tr key={value.id}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{value.email}</td>
+                                                    <td>
+                                                        <span className={`badge ${isAnAdmin ? 'bg-success' : 'bg-primary'}`}>
+                                                            {UserRoles[value.role] || value.role}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <Form.Select
+                                                            name={`userRole-${value.id}`}
+                                                            defaultValue={value.role}
+                                                            disabled={isDisabled}
+                                                            ref={el => (refs.current[value.id] = el)}
+                                                            className="user-role-select"
+                                                        >
+                                                            <option value="">Select a role...</option>
+                                                            {Object.keys(UserRoles).map(roleKey => (
+                                                                <option key={roleKey} value={roleKey}>
+                                                                    {UserRoles[roleKey]}
                                                                 </option>
-                                                            ))
-                                                        }
-                                                    </Form.Select>
-
-                                                    <Button variant="success" type="button"
-                                                            onClick={() => handleUpdateButton(key)}
-                                                            disabled={(isAnAdmin && isCurrentUser) || isDefaultAdmin || isDefaultUser}>
-                                                        Update
-                                                    </Button>
-
-                                                </InputGroup>
-                                            </div>
-                                        )
-                                        }
-                                    )
-                                }
-                            </>
-                            :
-                            loadingContent
-                    }
-                </div>
+                                                            ))}
+                                                        </Form.Select>
+                                                    </td>
+                                                    <td>
+                                                        <Button
+                                                            variant="success"
+                                                            type="button"
+                                                            onClick={() => handleUpdateButton(value.id, value.email, value.role)}
+                                                            disabled={isDisabled}
+                                                            className="update-user-button"
+                                                        >
+                                                            Update
+                                                        </Button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </Table>
+                            </div>
+                        ) : (
+                            <p className="text-center text-muted py-4">No users found.</p>
+                        )
+                    )}
+                </Card.Body>
+            </Card>
         </div>
     );
 };

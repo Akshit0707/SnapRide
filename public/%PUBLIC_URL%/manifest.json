@@ -1,0 +1,15 @@
+{
+  "short_name": "EasyDrive",
+  "name": "EasyDrive Rentals",
+  "icons": [
+
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "serviceworker": { 
+    "src": "/service-worker.js",
+    "scope": "/" 
+}
+}

@@ -1,202 +1,1725 @@
-/* GENERAL SETTINGS START */
+/* === GENERAL COLOR VARIABLES === */
 $primaryColor: #fe5b29;
 $secondaryColor: #111111;
 $tertiaryColor: #2b3036;
 $quaternaryColor: #cf4419;
-$quinaryColor: #fcf8f8;
+$quinaryColor: #fcf8f2;
 
-.primary-color {
-  color: $primaryColor;
-}
-.secondary-color {
-  color: $secondaryColor;
-}
-.tertiary-color {
-  color: $tertiaryColor;
-}
-.quaternary-color {
-  color: $quaternaryColor;
-}
-.quinary-color {
-  color: $quinaryColor;
-}
+/* === COLORS === */
+$vibrantBackground: #ffcc00; // joyful, eye-catching yellow
+$slideBackground: #000000;
+$slideTextColor: #ffffff;
 
-.primary-bg-color {
-  background-color: $primaryColor;
-}
-.secondary-bg-color {
-  background-color: $secondaryColor;
-}
-.tertiary-bg-color {
-  color: $tertiaryColor;
-}
-.quaternary-bg-color {
-  color: $quaternaryColor;
-}
-.quinary-bg-color {
-  color: $quinaryColor;
-}
+/* === COLOR UTILITIES === */
+.primary-color { color: $primaryColor; }
+.secondary-color { color: $secondaryColor; }
+.tertiary-color { color: $tertiaryColor; }
+.quaternary-color { color: $quaternaryColor; }
+.quinary-color { color: $quinaryColor; }
 
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
+.primary-bg-color { background-color: $primaryColor; }
+.secondary-bg-color { background-color: $secondaryColor; }
+.tertiary-bg-color { background-color: $tertiaryColor; }
+.quaternary-bg-color { background-color: $quaternaryColor; }
+.quinary-bg-color { background-color: $quinaryColor; }
+
+.primary-text-color { color: $primaryColor; }
+.secondary-text-color { color: $secondaryColor; }
+.tertiary-text-color { color: $tertiaryColor; }
+.quaternary-text-color { color: $quaternaryColor; }
+.quinary-text-color { color: $quinaryColor; }
+
+/* === TYPOGRAPHY === */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap"); // Ensure Montserrat is imported for headings
 
 * {
   font-family: "Open Sans", sans-serif;
+  box-sizing: border-box; // Good practice for consistent layout
 }
 
-.fw-400 {
-  font-weight: 400;
-}
-.fw-500 {
-  font-weight: 500;
-}
-.fw-600 {
-  font-weight: 600;
-}
-.fw-700 {
-  font-weight: 700;
-}
-.fw-800 {
-  font-weight: 800;
-}
+.fw-400 { font-weight: 400; }
+.fw-500 { font-weight: 500; }
+.fw-600 { font-weight: 600; }
+.fw-700 { font-weight: 700; }
+.fw-800 { font-weight: 800; }
 
-svg polyline {
-  stroke: $quinaryColor;
-}
-/* GENERAL SETTINGS END */
+/* === BASIC SECTIONS (Light Mode Default) === */
+.features-light {
+  background-color: #2b3036;
+  color: white; // Sets default text color for the section to white
 
-/* MOBILE SETTINGS START */
-@media only screen and (min-width: 768px) {
-  #slider .banner-section {
-    min-height: 500px;
+  // REMOVED THE PROBLEMATIC GENERAL SELECTOR FOR H1-H6, P, SPAN, SVG
+  // This was causing text to become black and disappear on dark backgrounds.
+
+  .features-heading {
+    color: #fff;
+    font-weight: 700;
   }
 }
-/* MOBILE SETTINGS END */
 
-/* HEADER START */
-header#header > .header-line-2 {
-  background-color: $primaryColor;
-}
-header#header > .header-line-2 .header-line-2-icon {
-  margin-top: -3px;
-}
-/* HEADER END */
-
-/* SLIDER START */
-.carousel,
-.carousel-caption,
-.carousel-inner {
-  position: static;
-}
-.carousel-indicators,
-.carousel-control-prev,
-.carousel-control-next {
-  display: none;
+/* === GLOBAL INPUT PLACEHOLDER STYLING === */
+// This targets the placeholder text specifically and works with themes
+input::placeholder,
+textarea::placeholder {
+  color: #888888; // Default light theme placeholder color
+  opacity: 1; // Ensure full visibility
+  transition: color 0.3s ease-in-out;
 }
 
-#slider .next-button:hover {
+// Dark theme specific placeholder styling
+body.dark-theme {
+  input::placeholder,
+  textarea::placeholder {
+    color: #D0D0D0 !important; // Light gray for visibility on dark backgrounds
+    opacity: 1 !important;
+  }
+}
+
+// General focus styles for Bootstrap form controls
+.form-control:focus {
+  border-color: #20C997 !important; // Accent color on focus
+  box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25) !important; // Glow effect
+}
+
+
+/* === SWEETALERT2 (SWAL) THEMING FOR DARK MODE === */
+// These classes are applied via customClass in Swal.fire()
+.swal2-dark-mode-popup {
+    background-color: #333 !important;
+    color: #eee !important;
+}
+.swal2-dark-mode-title {
+    color: #ADD8E6 !important;
+}
+.swal2-dark-mode-text {
+    color: #ccc !important;
+}
+.swal2-dark-mode-confirm-button {
+    background-color: #20C997 !important;
+    color: white !important;
+    border: none !important;
+    &:hover {
+        background-color: #1AA07B !important; // Darker green on hover
+    }
+}
+
+
+/* === SLIDER SECTION === */
+#slider {
+  padding: 4rem 0;
   background-color: $tertiaryColor;
-}
-#slider .prev-button:hover {
-  background-color: $quaternaryColor;
+  color: white;
+  overflow: hidden;
+
+  .carousel-item {
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+    backface-visibility: hidden;
+
+    .slide-content-wrapper {
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.2);
+        z-index: 1;
+      }
+    }
+  }
+
+  .slide-image-container {
+    position: relative;
+    z-index: 2;
+    transform: scale(0.95);
+    transition: transform 1.2s ease-out;
+  }
+
+  .carousel-item.active .slide-image-container {
+    transform: scale(1);
+  }
+
+  .slide-text-content {
+    position: relative;
+    z-index: 3;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+  }
+
+ .slide-title {
+    font-family: "Montserrat", sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background-image: linear-gradient(
+      45deg,
+      $primaryColor,
+      lighten($primaryColor, 15%),
+      $quaternaryColor
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: fadeInDown 1.2s ease-out, textShine 3s infinite alternate; // `textShine` animation not defined here, ensure it's elsewhere or remove
+    background-size: 200% auto;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+ }
+
+  .slide-tagline {
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 500;
+    margin-bottom: 2.5rem;
+    animation: fadeInUp 1.2s ease-out;
+    animation-delay: 0.3s;
+    line-height: 1.6;
+  }
+
+  .rent-btn {
+    background-color: $primaryColor;
+    border: none;
+    padding: 0.8rem 2.5rem;
+    font-weight: 700;
+    color: white;
+    border-radius: 50px;
+    box-shadow: 0 5px 15px rgba($primaryColor, 0.4);
+    transition: all 0.3s ease-in-out;
+    animation: fadeInUp 1.2s ease-out;
+    animation-delay: 0.6s;
+
+    &:hover {
+      background-color: $quaternaryColor;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba($quaternaryColor, 0.6);
+    }
+  }
+
+  .arrow-button {
+    border-radius: 50%;
+    padding: 0.8rem 1.4rem;
+    font-size: 1.5rem;
+    background-color: rgba($primaryColor, 0.1);
+    border: 2px solid $primaryColor;
+    color: $primaryColor;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+      background-color: $primaryColor;
+      color: white;
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba($primaryColor, 0.6);
+    }
+  }
 }
 
-#slider .banner-section {
-  background-image: url("assets/images/banner-bg.jpg");
-  background-repeat: no-repeat;
-  background-position-x: right;
-  background-position-y: top;
-  background-size: contain;
+/* === SLIDE THEMES (Global) === */
+.slide-orange {
+  .slide-content-wrapper {
+    background: linear-gradient(135deg, darken($primaryColor, 5%), $primaryColor);
+  }
 }
-/* SLIDER END */
 
-/* ABOUT SECTION START */
-#about-section .readmore-btn {
-  background-color: $primaryColor;
-  border-radius: 3px;
-  color: $quinaryColor;
+.slide-dark {
+  .slide-content-wrapper {
+    background: linear-gradient(135deg, $secondaryColor, lighten($secondaryColor, 10%));
+  }
+}
+
+.slide-light {
+  .slide-content-wrapper {
+    background: linear-gradient(135deg, $quinaryColor, darken($quinaryColor, 5%));
+    .slide-title, .slide-tagline, .rent-btn {
+      color: $secondaryColor;
+    }
+    .rent-btn {
+      background-color: $secondaryColor;
+      color: $quinaryColor;
+      &:hover {
+        background-color: darken($secondaryColor, 10%);
+        color: white;
+      }
+    }
+  }
+}
+
+/* === DARK MODE SUPPORT for Slider === */
+body.dark-theme { // Changed to match the class added in App.js
+  #slider {
+    background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+    color: #f0f0f0;
+
+    .slide-content-wrapper {
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+    }
+
+    .slide-orange {
+      .slide-content-wrapper {
+        background: linear-gradient(135deg, darken($primaryColor, 15%), darken($primaryColor, 5%));
+      }
+    }
+
+    .slide-dark {
+      .slide-content-wrapper {
+        background: linear-gradient(135deg, lighten($secondaryColor, 5%), lighten($secondaryColor, 15%));
+      }
+    }
+
+    .slide-light {
+      .slide-content-wrapper {
+        background: linear-gradient(135deg, #333, #444);
+        .slide-title, .slide-tagline, .rent-btn {
+          color: #f0f0f0;
+        }
+        .rent-btn {
+          background-color: #555;
+          color: #f0f0f0;
+          &:hover {
+            background-color: #777;
+          }
+        }
+      }
+    }
+
+    .rent-btn {
+      box-shadow: 0 5px 15px rgba($primaryColor, 0.2);
+      &:hover {
+        box-shadow: 0 8px 20px rgba($quaternaryColor, 0.4);
+      }
+    }
+
+    .arrow-button {
+      background-color: rgba($primaryColor, 0.2);
+      border-color: $primaryColor;
+      color: $primaryColor;
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+      &:hover {
+        background-color: $primaryColor;
+        color: white;
+        box-shadow: 0 4px 12px rgba($primaryColor, 0.4);
+      }
+    }
+  }
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Added a simple textShine animation placeholder if needed by .slide-title
+@keyframes textShine {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+
+/* === RESPONSIVE SLIDER STYLES === */
+@media (max-width: 992px) {
+  #slider {
+    .carousel-item .slide-content-wrapper {
+      min-height: 450px;
+    }
+    .slide-title {
+      font-size: 2.8rem;
+    }
+    .slide-tagline {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  #slider {
+    .carousel-item .slide-content-wrapper {
+      flex-direction: column;
+      min-height: 600px;
+      padding: 2rem;
+    }
+    .slide-image-container {
+      margin-bottom: 2rem;
+    }
+    .slide-title {
+      font-size: 2.5rem;
+      text-align: center;
+    }
+    .slide-tagline {
+      font-size: 1.1rem;
+      text-align: center;
+    }
+    .rent-btn {
+      display: block;
+      margin: 1.5rem auto;
+    }
+    .arrow-button {
+      padding: 0.6rem 1.1rem;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  #slider {
+    padding: 2rem 0;
+    .carousel-item .slide-content-wrapper {
+      min-height: 500px;
+      padding: 1.5rem;
+    }
+    .slide-title {
+      font-size: 2rem;
+    }
+    .slide-tagline {
+      font-size: 1rem;
+    }
+    .rent-btn {
+      padding: 0.7rem 2rem;
+    }
+    .arrow-button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+    }
+  }
+}
+
+
+/* --- AdminHeader Specific Styles --- */
+
+.admin-header {
+  // This is the parent of admin-header-top and admin-navbar-bottom
+  // No specific styles needed here unless you want a global header background.
+}
+
+// Top Header Bar
+.admin-header-top {
+  background-color: #1a1a1a; // Dark background for the top bar
+  padding: 1.5rem 0; // More generous padding
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08); // Subtle border
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); // More pronounced shadow
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  z-index: 1020;
+}
+
+// REMOVED: .admin-brand selector as it's no longer used for the title container directly
+// REMOVED: .admin-brand-icon selector as the icon next to the title is removed
+
+.admin-brand-title {
+  font-family: "Montserrat", sans-serif; // Using Montserrat for impact
+  font-weight: 800; // Extra bold
+  font-size: 2.8rem; // Slightly smaller than main site, but still impactful for admin
+  color: #f8f8f8; // White/off-white for main text
+  letter-spacing: 1.2px; // More spacing for better readability
+  // REMOVED: text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap; // Prevent wrapping
+  overflow: hidden; //
+  text-overflow: ellipsis; // Handle overflow gracefully
+
+  // Responsive adjustments for the title font size
+  @media (max-width: 992px) {
+    font-size: 2.2rem;
+  }
+  @media (max-width: 768px) {
+    font-size: 1.8rem;
+    letter-spacing: 0.8px;
+  }
+  @media (max-width: 576px) {
+    font-size: 1.5rem;
+  }
+}
+
+/* --- General Section Headings & Subheadings (for main site) --- */
+.section-heading {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-size: 3.5rem;
+  color: #FFFFFF;
   text-align: center;
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
   text-transform: uppercase;
-}
-#about-section .readmore-btn:hover {
-  background-color: $tertiaryColor;
-}
-/* ABOUT SECTION END */
+  transition: all 0.3s ease-in-out;
 
-/* CAR SEARCH START */
-#car-search {
-  background-color: $tertiaryColor;
-}
-#car-search .search-btn {
-  background-color: $primaryColor;
-  color: $quinaryColor;
-  text-transform: uppercase;
-  border: 0;
-}
-#car-search a:not([disabled]) .search-btn:hover {
-  color: $tertiaryColor;
-  background-color: $quinaryColor;
-}
-/* CAR SEARCH END */
+  .highlight-text {
+    color: #FE5B29;
+    transition: all 0.3s ease-in-out;
+  }
 
-/* CAR OFFERS START */
-#car-offers .gallery-box {
-  box-shadow: 0px 0px 6px 6px #f4f3f2;
+  @media (max-width: 992px) {
+    font-size: 2.8rem;
+  }
+  @media (max-width: 768px) {
+    font-size: 2.2rem;
+    line-height: 1.2;
+  }
+  @media (max-width: 576px) {
+    font-size: 1.8rem;
+  }
 }
-#car-offers .rent-now-button:hover {
-  color: $tertiaryColor;
-  background-color: $quinaryColor;
-}
-/* CAR OFFERS END */
 
-/* FEATURES SECTION START */
-#features-section {
-  background-color: $tertiaryColor;
+.section-subheading {
+  font-family: "Roboto", sans-serif; // Using Roboto for subheadings
+  font-size: 1.25rem;
+  color: #B0B0B0;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3rem auto;
+  line-height: 1.6;
+  transition: all 0.3s ease-in-out;
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 576px) {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
 }
-/* FEATURES SECTION END */
 
-/* CONTACT SECTION START */
-/* CONTACT SECTION END */
-
-/* FOOTER START */
-#footer .social-icon {
-  float: left;
+/* --- Section Padding (for main site) --- */
+#why-choose-us,
+#customer-testimonials,
+#contact-section { // Added contact-section for consistent padding
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  @media (max-width: 768px) {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+  @media (max-width: 576px) {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
 }
-#footer .social-icon ul li {
-  float: left;
-  margin: 3px;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
+
+/* --- Theme Overrides (for main site and admin) --- */
+body.dark-theme {
+  .section-heading {
+    color: #FFFFFF;
+    .highlight-text {
+      color: #FF7B00;
+    }
+  }
+  .section-subheading {
+    color: #C0C0C0;
+  }
+  .card {
+    background-color: #1C1C1C;
+    border-color: #333333;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    color: #E0E0E0;
+  }
+}
+
+body.light-theme {
+  .section-heading {
+    color: #2b3036;
+    .highlight-text {
+      color: #FE5B29;
+    }
+  }
+  .section-subheading {
+    color: #555555;
+  }
+  .card {
+    background-color: #FFFFFF;
+    border-color: #E0E0E0;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    color: #333333;
+  }
+}
+
+/* --- AdminHeader Specific Styles (FINALIZED) --- */
+
+.admin-header {
+  // Container for the entire header (top bar + nav bar)
+}
+
+// Top Header Bar
+.admin-header-top {
+  background-color: #1a1a1a;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  z-index: 1020;
+}
+
+// Admin Brand Title Styling (UPDATED to green color)
+.admin-brand-title {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-size: 2.8rem;
+  color: #20C997; // *** FIX: Changed to your accent green color ***
+  letter-spacing: 1.2px;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media (max-width: 992px) {
+    font-size: 2.2rem;
+  }
+  @media (max-width: 768px) {
+    font-size: 1.8rem;
+    letter-spacing: 0.8px;
+  }
+  @media (max-width: 576px) {
+    font-size: 1.5rem;
+  }
+}
+
+// User Profile Dropdown Container within header top
+.admin-header-user-nav {
+  // No specific styles needed here if Bootstrap col classes handle alignment
+}
+
+// User Profile Dropdown styles
+.admin-profile-dropdown {
+  .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #f0f0f0;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    &::after {
+      vertical-align: middle;
+      border-top: 0.4em solid;
+      border-right: 0.4em solid transparent;
+      border-bottom: 0;
+      border-left: 0.4em solid transparent;
+      margin-left: 0.6em;
+      transition: transform 0.2s ease-in-out;
+    }
+    &.show::after {
+      transform: rotate(180deg);
+    }
+  }
+
+  .dropdown-menu {
+    background-color: #282828;
+    border: 1px solid #444;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    padding: 0.75rem 0;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem !important;
+  }
+
+  .dropdown-item {
+    color: #ccc;
+    padding: 0.75rem 1.5rem;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: #3a3a3a;
+      color: #fff;
+    }
+    &:active {
+      background-color: #20C997;
+      color: #fff;
+    }
+  }
+  .dropdown-item-text {
+    padding: 0.75rem 1.5rem;
+    color: #e0e0e0;
+    strong {
+      color: #fff;
+      font-size: 1.1em;
+    }
+    small {
+      color: #b0b0b0;
+    }
+    .text-muted-role {
+      color: #888888;
+      font-weight: 500;
+    }
+    border-bottom: 1px solid #444;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .dropdown-divider {
+    border-top-color: #444;
+    margin: 0.5rem 0;
+  }
+}
+
+
+// Bottom Navigation Bar (FINALIZED)
+.admin-navbar-bottom {
   background-color: #fff;
-  text-align: center;
+  padding: 0.8rem 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  position: relative;
+  z-index: 1010;
+
+  .navbar-toggler {
+    border-color: rgba(0,0,0,0.1);
+    &:focus {
+      box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25);
+    }
+    .navbar-toggler-icon {
+      background-color: #fff ;
+      // This will make the hamburger lines black/dark grey
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+  }
+
+  .navbar-nav {
+    .admin-nav-link {
+      color: #444;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.75rem 1.2rem;
+      border-radius: 0.4rem;
+      transition: all 0.2s ease-in-out;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+
+      .admin-nav-icon {
+        margin-right: 0.6rem;
+        color: #20C997;
+        font-size: 1.1em;
+      }
+
+      &:hover {
+        background-color: #f0f0f0;
+        color: #000;
+      }
+
+      &.active {
+        background-color: #e6f6f1;
+        color: #000;
+        font-weight: 700;
+        .admin-nav-icon {
+          color: darken(#20C997, 10%);
+        }
+      }
+    }
+
+    .admin-nav-dropdown {
+      .dropdown-toggle {
+        display: flex;
+        align-items: center;
+        color: #444; // *** FIX: Ensure text color is always visible in light theme ***
+        transition: color 0.2s ease-in-out;
+
+        .admin-nav-icon {
+            margin-right: 0;
+        }
+
+        &::after {
+          vertical-align: middle;
+          border-top: 0.4em solid;
+          border-right: 0.4em solid transparent;
+          border-bottom: 0;
+          border-left: 0.4em solid transparent;
+          margin-left: 0.6em;
+          transition: transform 0.2s ease-in-out;
+          color: #444; // *** FIX: Ensure caret color is always visible in light theme ***
+        }
+        &.show::after {
+          transform: rotate(180deg);
+        }
+      }
+
+      .dropdown-menu {
+        background-color: #fff;
+        border: 1px solid #eee;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 0.5rem 0;
+        border-radius: 0.4rem;
+        margin-top: 0.5rem !important;
+
+        .dropdown-item {
+          color: #444;
+          padding: 0.75rem 1.2rem;
+          transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+
+          &:hover {
+            background-color: #f8f8f8;
+            color: #000;
+          }
+          &:active {
+            background-color: #20C997;
+            color: #fff;
+          }
+        }
+        .dropdown-divider {
+          border-top-color: #eee;
+          margin: 0.5rem 0;
+        }
+      }
+    }
+  }
 }
 
-#footer .social-icon ul li a {
-  font-size: 20px;
-}
-#footer .social-icon ul li a svg {
-  margin-top: -3px;
-}
-/* FOOTER END */
+// Dark theme specific adjustments for the admin navbar
+body.dark-theme {
+  .admin-navbar-bottom {
+    background-color: #222222;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 
-/* MY RENTALS START */
-#my-rentals {
-  clear: both;
+    .navbar-nav {
+      .admin-nav-link {
+        color: #E0E0E0;
+        &:hover {
+          background-color: #333333;
+          color: #fff;
+        }
+        &.active {
+          background-color: #004d33;
+          color: #fff;
+          .admin-nav-icon {
+            color: lighten(#20C997, 10%);
+          }
+        }
+        .admin-nav-icon {
+          color: #20C997;
+        }
+      }
+      .admin-nav-dropdown {
+        .dropdown-toggle {
+          color: #E0E0E0;
+          &::after {
+            color: #E0E0E0;
+          }
+        }
+        .dropdown-menu {
+          background-color: #282828;
+          border-color: #444;
+          .dropdown-item {
+            color: #ccc;
+            &:hover {
+              background-color: #3a3a3a;
+              color: #fff;
+            }
+          }
+          .dropdown-divider {
+            border-top-color: #444;
+          }
+        }
+      }
+    }
+  }
 }
-/* MY RENTALS END */
 
-.react-select .select__control {
-  border-radius: 0 5px 5px 0;
-}
-.recaptcha > div > div {
-  margin: auto;
+/* --- UsersManager Specific Styles --- */
+
+.users-manager-container {
+  // Optional: Add some padding around the entire manager component if needed
+  // padding: 2rem;
 }
 
-header.admin-header .navbar-expand-lg .navbar-nav .nav-link {
-  color: $tertiaryColor;
+.admin-panel-heading {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  color: #333; /* Darker color for internal headings in light mode */
+  margin-bottom: 2rem;
+
+  body.dark-theme & {
+    color: #e0e0e0; /* Light color for dark mode */
+  }
 }
-header.admin-header .dropdown-item.active,
-.dropdown-item:active {
-  color: $tertiaryColor;
+
+.admin-sub-heading {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  color: #555; /* Slightly lighter for sub-headings */
+  margin-bottom: 1.5rem;
+
+  body.dark-theme & {
+    color: #c0c0c0;
+  }
+}
+
+.users-table {
+  font-size: 0.95rem;
+
+  thead {
+    th {
+      font-weight: 600;
+      white-space: nowrap; // Prevent header text from wrapping
+    }
+  }
+
+  tbody {
+    td {
+      padding: 0.75rem;
+      white-space: nowrap; // Keep content on one line unless explicitly allowed
+    }
+  }
+
+  .user-role-select {
+    min-width: 120px; // Give select box a reasonable minimum width
+  }
+
+  .update-user-button {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .badge {
+    padding: 0.4em 0.7em;
+    font-weight: 600;
+    font-size: 0.8em;
+    border-radius: 0.25rem;
+  }
+}
+
+/* Dark theme specific adjustments for the users table */
+body.dark-theme {
+  .users-table {
+    color: #e0e0e0; // Text color for table body in dark mode
+    border-color: #444; // Border color for table in dark mode
+
+    thead.table-dark {
+      background-color: #333; // Darker header background
+      color: #fff;
+      border-color: #555;
+    }
+
+    tbody {
+      tr {
+        background-color: #282828; // Row background
+        &:nth-of-type(odd) {
+          background-color: #2e2e2e; // Striped rows
+        }
+        &:hover {
+          background-color: #3a3a3a; // Hover effect
+        }
+      }
+      td {
+        border-color: #444; // Cell borders
+      }
+    }
+
+    .user-role-select {
+      background-color: #383838;
+      color: #e0e0e0;
+      border-color: #555;
+      option {
+        background-color: #383838;
+        color: #e0e0e0;
+      }
+    }
+
+    .badge {
+      &.bg-success {
+        background-color: darken(#20C997, 10%) !important; // Adjust green for dark mode if needed
+      }
+      &.bg-primary {
+        background-color: darken(#0d6efd, 10%) !important; // Adjust primary for dark mode if needed
+      }
+    }
+  }
+}
+
+/* --- VehicleBrands Specific Styles --- */
+
+.vehicle-brands-manager-container {
+  // Overall container for the page
+  padding-bottom: 3rem; // Add some bottom padding
+}
+
+.admin-panel-heading {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  color: #333; /* Default for light theme */
+  margin-bottom: 2rem;
+
+  body.dark-theme & {
+    color: #e0e0e0; /* Light color for dark mode */
+  }
+}
+
+.admin-sub-heading {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  color: #555; /* Default for light theme */
+  margin-bottom: 1.5rem;
+
+  body.dark-theme & {
+    color: #c0c0c0; /* Light color for dark mode */
+  }
+}
+
+.vehicle-brands-card {
   background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.75rem; // More rounded
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); // Softer shadow
+
+  body.dark-theme & {
+    background-color: #1C1C1C;
+    border-color: #333333;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    color: #e0e0e0; // Ensure text is visible
+  }
+}
+
+.category-toggle-group {
+  .btn {
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+    min-width: 150px; // Ensure consistent width
+    border-radius: 0.5rem; // Slightly rounded buttons
+
+    &.btn-success {
+      background-color: #20C997;
+      border-color: #20C997;
+      color: #fff;
+    }
+    &.btn-outline-secondary {
+      border-color: #ced4da;
+      color: #6c757d; // Default text color
+      &:hover {
+        background-color: #e9ecef;
+        color: #495057;
+      }
+    }
+  }
+
+  // Specific styling for the group to make left/right rounded corners only at ends
+  // Remove Bootstrap's default rounded-start-pill/rounded-end-pill as btn-group handles it.
+  & > .btn:first-child:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  & > .btn:last-child:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  & > .btn:not(:first-child):not(:last-child) {
+    border-radius: 0;
+  }
+
+  // Dark theme for category toggles
+  body.dark-theme & {
+    .btn-outline-secondary {
+      border-color: #444;
+      color: #b0b0b0;
+      &:hover {
+        background-color: #333;
+        color: #fff;
+      }
+    }
+  }
+}
+
+
+.brands-list-section {
+  .brand-item-input {
+    .form-control {
+      background-color: #f8f9fa;
+      border-color: #e9ecef;
+      &:focus {
+        border-color: #20C997;
+        box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25);
+      }
+    }
+    .remove-brand-button {
+      font-weight: 500;
+    }
+  }
+
+  body.dark-theme & {
+    .brand-item-input {
+      .form-control {
+        background-color: #282828;
+        border-color: #444;
+        color: #e0e0e0;
+        &:focus {
+          border-color: #20C997;
+          box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25);
+        }
+      }
+      .remove-brand-button {
+        background-color: transparent; // Ensure transparency
+        border-color: #dc3545; // Match danger red
+        color: #dc3545; // Text color
+        &:hover {
+          background-color: #dc3545;
+          color: #fff;
+        }
+      }
+    }
+  }
+}
+
+.add-new-brand-input {
+  .form-control {
+    background-color: #f8f9fa;
+    border-color: #e9ecef;
+    &:focus {
+      border-color: #20C997;
+      box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25);
+    }
+  }
+  .add-brand-button {
+    font-weight: 500;
+  }
+
+  body.dark-theme & {
+    .form-control {
+      background-color: #282828;
+      border-color: #444;
+      color: #e0e0e0;
+      &:focus {
+        border-color: #20C997;
+        box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25);
+      }
+    }
+    .add-brand-button {
+        background-color: #20C997; // Keep green for add
+        border-color: #20C997;
+        color: #fff;
+        &:hover {
+            background-color: darken(#20C997, 10%);
+        }
+    }
+  }
+}
+
+.save-changes-button {
+  font-size: 1.1rem;
+  padding: 0.8rem 2.5rem;
+  border-radius: 0.5rem;
+  background-color: #007bff; // Bootstrap primary blue
+  border-color: #007bff;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    background-color: darken(#007bff, 10%);
+    border-color: darken(#007bff, 10%);
+  }
+
+  body.dark-theme & {
+    background-color: #0d6efd; // Default primary for dark mode
+    border-color: #0d6efd;
+    &:hover {
+      background-color: lighten(#0d6efd, 10%);
+      border-color: lighten(#0d6efd, 10%);
+    }
+  }
+}
+
+/* --- VehicleModels Specific Styles --- */
+
+.vehicle-models-manager-container {
+  padding-bottom: 3rem;
+}
+
+// Reusing existing admin heading styles
+.admin-panel-heading {
+  // ... (defined globally in admin styles)
+}
+.admin-sub-heading {
+  // ... (defined globally in admin styles)
+}
+
+.vehicle-models-card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+
+  body.dark-theme & {
+    background-color: #1C1C1C;
+    border-color: #333333;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    color: #e0e0e0;
+  }
+}
+
+// Category Toggle Buttons (reusing styles from VehicleBrands)
+.category-toggle-group {
+  .btn {
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+    min-width: 150px;
+    border-radius: 0.5rem;
+
+    &.btn-success {
+      background-color: #20C997;
+      border-color: #20C997;
+      color: #fff;
+    }
+    &.btn-outline-secondary {
+      border-color: #ced4da;
+      color: #6c757d;
+      &:hover {
+        background-color: #e9ecef;
+        color: #495057;
+      }
+    }
+  }
+
+  & > .btn:first-child:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  & > .btn:last-child:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  & > .btn:not(:first-child):not(:last-child) {
+    border-radius: 0;
+  }
+
+  body.dark-theme & {
+    .btn-outline-secondary {
+      border-color: #444;
+      color: #b0b0b0;
+      &:hover {
+        background-color: #333;
+        color: #fff;
+      }
+    }
+  }
+}
+
+// Styling for each Brand's Model Group
+.model-group-item {
+  background-color: #f8f9fa; // Light background for individual brand cards
+  border: 1px solid #e9ecef;
+  border-radius: 0.5rem; // Slightly less rounded than main card
+  padding: 1.5rem; // Internal padding
+  margin-bottom: 1.5rem; // Space between brand groups
+
+  h3 {
+    color: #333; // Darker heading for brand name
+    .text-primary { // For the icon
+        color: #007bff !important; // Bootstrap primary blue
+        body.dark-theme & {
+            color: #20C997 !important; // Accent green in dark mode
+        }
+    }
+  }
+
+  .model-list-item {
+    background-color: transparent !important; // Override ListGroup.Item background
+    border: none !important; // Remove ListGroup.Item borders
+    padding: 0 !important; // Remove ListGroup.Item padding
+  }
+
+  .model-input-control {
+    background-color: #fff;
+    border-color: #ced4da;
+    &:focus {
+      border-color: #20C997;
+      box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25);
+    }
+  }
+
+  .remove-model-button {
+    font-weight: 500;
+    border-color: #dc3545;
+    color: #dc3545;
+    &:hover {
+      background-color: #dc3545;
+      color: #fff;
+    }
+  }
+
+  .add-model-input-group {
+    .new-model-input-control {
+      background-color: #fff;
+      border-color: #ced4da;
+      &:focus {
+        border-color: #20C997;
+        box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25);
+      }
+    }
+    .add-model-button {
+      font-weight: 500;
+    }
+  }
+
+  body.dark-theme & {
+    background-color: #282828; // Dark background for individual brand cards
+    border-color: #444;
+    color: #e0e0e0;
+
+    h3 {
+      color: #e0e0e0;
+    }
+
+    .model-input-control,
+    .new-model-input-control {
+      background-color: #333;
+      border-color: #555;
+      color: #e0e0e0;
+      &:focus {
+        border-color: #20C997;
+        box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25);
+      }
+    }
+
+    .remove-model-button {
+      border-color: #dc3545;
+      color: #dc3545;
+      &:hover {
+        background-color: #dc3545;
+        color: #fff;
+      }
+    }
+
+    .add-model-button {
+        background-color: #20C997;
+        border-color: #20C997;
+        color: #fff;
+        &:hover {
+            background-color: darken(#20C997, 10%);
+        }
+    }
+  }
+}
+
+// Create New Brand Group Section
+.create-new-group-input {
+  .brand-select-control,
+  .new-model-name-input-control {
+    background-color: #f8f9fa;
+    border-color: #e9ecef;
+    &:focus {
+      border-color: #20C997;
+      box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25);
+    }
+  }
+  .create-group-button {
+    font-weight: 500;
+  }
+
+  body.dark-theme & {
+    .brand-select-control,
+    .new-model-name-input-control {
+      background-color: #282828;
+      border-color: #444;
+      color: #e0e0e0;
+      &:focus {
+        border-color: #20C997;
+        box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25);
+      }
+    }
+    .create-group-button {
+        background-color: #0d6efd; // Primary blue
+        border-color: #0d6efd;
+        color: #fff;
+        &:hover {
+            background-color: lighten(#0d6efd, 10%);
+        }
+    }
+  }
+}
+
+// Save Changes Button (reusing styles from VehicleBrands)
+.save-changes-button {
+  font-size: 1.1rem;
+  padding: 0.8rem 2.5rem;
+  border-radius: 0.5rem;
+  background-color: #007bff;
+  border-color: #007bff;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    background-color: darken(#007bff, 10%);
+    border-color: darken(#007bff, 10%);
+  }
+
+  body.dark-theme & {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    &:hover {
+      background-color: lighten(#0d6efd, 10%);
+      border-color: lighten(#0d6efd, 10%);
+    }
+  }
+}
+
+/* Login Page Wrapper - Full screen background */
+.login-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Use a dark background consistent with your site's dark theme */
+  background-color: #1a1a1a; /* Matches your header top background */
+  padding: 2rem 0; /* Add vertical padding for smaller screens */
+  box-sizing: border-box;
+}
+
+/* Container for the login card */
+.login-container {
+  max-width: 1200px; /* Limit overall width */
+}
+
+/* The main login card */
+.login-card {
+  background-color: #282828; /* Darker background for the card, contrasts with wrapper */
+  border-radius: 15px; /* Softer rounded corners */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* More pronounced, dark shadow */
+  padding: 3rem 2.5rem; /* Generous padding */
+  text-align: center;
+  border: 1px solid #3a3a3a; /* Subtle border for definition */
+}
+
+/* Title and Subtitle */
+.login-title {
+  font-family: 'Montserrat', sans-serif; /* Use your preferred font */
+  font-weight: 700;
+  color: #f0f0f0; /* Light color for text in dark theme */
+  margin-bottom: 0.75rem;
+  font-size: 2.5rem; /* Slightly larger title */
+}
+
+.login-subtitle {
+  font-family: 'Roboto', sans-serif; /* Use your preferred font */
+  color: #b0b0b0; /* Lighter grey for subtitle */
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem; /* More space below subtitle */
+}
+
+/* Removed: .demo-credentials-section and related styles */
+
+/* Form Styling */
+.form-label-custom {
+  font-weight: 600;
+  color: #e0e0e0; /* Light color for labels */
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem; /* Slightly smaller label text */
+}
+
+.form-control-custom {
+  border-radius: 8px; /* Slightly more rounded inputs */
+  padding: 0.85rem 1rem;
+  background-color: #333333; /* Darker background for input fields */
+  border: 1px solid #555555; /* Defined border */
+  color: #ffffff; /* White text for input value */
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.form-control-custom::placeholder { /* Style placeholder text */
+  color: #888888;
+  opacity: 1; /* Ensure placeholder is not too transparent */
+}
+
+.form-control-custom:focus {
+  background-color: #333333; /* Maintain dark background on focus */
+  border-color: #20C997; /* Your primary accent green color for focus */
+  box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25); /* Subtle glow with accent color */
+  color: #ffffff; /* Ensure text remains white */
+}
+
+/* Login Button */
+.login-submit-button {
+  background-color: #20C997; /* Your primary accent green color */
+  border-color: #20C997;
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  color: #fff; /* Ensure text is white */
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.login-submit-button:hover {
+  background-color: darken(#20C997, 10%); /* Darken accent green on hover */
+  border-color: darken(#20C997, 10%);
+}
+
+/* Sign Up Link */
+.signup-link {
+  color: #20C997; /* Your primary accent green color */
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.signup-link:hover {
+  color: lighten(#20C997, 10%); /* Lighter green on hover */
+  text-decoration: underline;
+}
+
+/* Spinner Styling */
+.text-center .spinner-border {
+  width: 3rem;
+  height: 3rem;
+  color: #20C997; /* Accent green for spinner */
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+  .login-card {
+    padding: 2rem 1.5rem;
+  }
+  .login-title {
+    font-size: 2rem;
+  }
+  .login-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+  .login-submit-button {
+    font-size: 1rem;
+  }
+}
+
+/* Signup Page Wrapper - Full screen background */
+.signup-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Use a dark background consistent with your site's dark theme */
+  background-color: #1a1a1a; /* Matches your header top background */
+  padding: 2rem 0; /* Add vertical padding for smaller screens */
+  box-sizing: border-box;
+}
+
+/* Container for the signup card */
+.signup-container {
+  max-width: 1200px; /* Limit overall width */
+}
+
+/* The main signup card */
+.signup-card {
+  background-color: #282828; /* Darker background for the card, contrasts with wrapper */
+  border-radius: 15px; /* Softer rounded corners */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* More pronounced, dark shadow */
+  padding: 3rem 2.5rem; /* Generous padding */
+  text-align: center;
+  border: 1px solid #3a3a3a; /* Subtle border for definition */
+}
+
+/* Title and Subtitle */
+.signup-title {
+  font-family: 'Montserrat', sans-serif; /* Use your preferred font */
+  font-weight: 700;
+  color: #f0f0f0; /* Light color for text in dark theme */
+  margin-bottom: 0.75rem;
+  font-size: 2.5rem; /* Slightly larger title */
+}
+
+.signup-subtitle {
+  font-family: 'Roboto', sans-serif; /* Use your preferred font */
+  color: #b0b0b0; /* Lighter grey for subtitle */
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem; /* More space below subtitle */
+}
+
+/* Form Styling - Reusing Login Page Styles where applicable */
+.form-label-custom {
+  font-weight: 600;
+  color: #e0e0e0; /* Light color for labels */
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem; /* Slightly smaller label text */
+}
+
+.form-control-custom {
+  border-radius: 8px; /* Slightly more rounded inputs */
+  padding: 0.85rem 1rem;
+  background-color: #333333; /* Darker background for input fields */
+  border: 1px solid #555555; /* Defined border */
+  color: #ffffff; /* White text for input value */
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.form-control-custom::placeholder { /* Style placeholder text */
+  color: #888888;
+  opacity: 1; /* Ensure placeholder is not too transparent */
+}
+
+/* Specific styling for select dropdown in dark theme */
+.form-control-custom.form-select {
+  -webkit-appearance: none; /* Remove default arrow on WebKit browsers */
+  -moz-appearance: none;    /* Remove default arrow on Firefox */
+  appearance: none;         /* Remove default arrow */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23f0f0f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  padding-right: 2.5rem; /* Make space for the custom arrow */
+}
+
+
+.form-control-custom:focus {
+  background-color: #333333; /* Maintain dark background on focus */
+  border-color: #20C997; /* Your primary accent green color for focus */
+  box-shadow: 0 0 0 0.25rem rgba(32, 201, 151, 0.25); /* Subtle glow with accent color */
+  color: #ffffff; /* Ensure text remains white */
+}
+
+/* Signup Button */
+.signup-submit-button {
+  background-color: #20C997; /* Your primary accent green color */
+  border-color: #20C997;
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  color: #fff; /* Ensure text is white */
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.signup-submit-button:hover {
+  background-color: darken(#20C997, 10%); /* Darken accent green on hover */
+  border-color: darken(#20C997, 10%);
+}
+
+/* Login Link */
+.login-link {
+  color: #20C997; /* Your primary accent green color */
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.login-link:hover {
+  color: lighten(#20C997, 10%); /* Lighter green on hover */
+  text-decoration: underline;
+}
+
+/* Spinner Styling */
+.text-center .spinner-border {
+  width: 3rem;
+  height: 3rem;
+  color: #20C997; /* Accent green for spinner */
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+  .signup-card {
+    padding: 2rem 1.5rem;
+  }
+  .signup-title {
+    font-size: 2rem;
+  }
+  .signup-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+  .signup-submit-button {
+    font-size: 1rem;
+  }
+}
+
+/* MyRentals specific styles */
+
+/* Customizing Bootstrap Tabs for Dark Theme */
+.custom-tabs .nav-link {
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem 0.75rem 0 0; /* Rounded top corners */
+  margin-right: 0.5rem; /* Space between tabs */
+  background-color: transparent; /* Default transparent background */
+  transition: all 0.2s ease-in-out;
+  border: 2px solid var(--bs-nav-tabs-border-color, #444); /* Fallback for dark theme */
+  border-bottom: none; /* No border at the bottom of the tab */
+  color: var(--bs-nav-tabs-link-color, #b0b0b0); /* Default text color */
+}
+
+.custom-tabs .nav-link:hover:not(.active) {
+  border-color: var(--bs-nav-tabs-link-hover-border-color, #555 #555 #1a1a1a);
+  background-color: var(--bs-nav-tabs-link-active-bg, #1a1a1a); /* Darker on hover */
+  color: var(--bs-nav-tabs-link-active-color, #20C997);
+}
+
+.custom-tabs .nav-link.active {
+  background-color: var(--bs-nav-tabs-link-active-bg, #1a1a1a);
+  border-color: var(--bs-nav-tabs-link-active-border-color, #444 #444 #1a1a1a);
+  color: var(--bs-nav-tabs-link-active-color, #20C997);
+  font-weight: 700; /* Make active tab text bolder */
+}
+
+/* Ensure content below tabs aligns with the tab design */
+.tab-content {
+  border-top: 2px solid var(--bs-nav-tabs-border-color, #444); /* Border below tabs */
+  padding-top: 1rem; /* Space between border and card */
+  border-radius: 0 0 0.75rem 0.75rem; /* Rounded bottom corners if needed, depends on card styling */
+}
+
+/* Specific badge styling within tabs */
+.custom-tabs .badge {
+    font-size: 0.8em; /* Smaller badge text */
+    padding: 0.3em 0.6em;
+    vertical-align: middle; /* Align with text */
+}
+
+/* Styling for the no bookings card */
+.no-bookings-card {
+    border-radius: 15px;
+    padding: 3rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Button hover effect for general primary buttons (e.g., Browse Vehicles) */
+.btn-primary {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Card image specific adjustments for dark theme */
+.card .img-fluid {
+  border-radius: 0 0 0 15px; /* Apply rounded corner only to bottom-left for dark theme */
+}
+
+/* Adjustments for when image is on right side (md breakpoint) */
+@media (min-width: 768px) {
+    .card .col-md-6:first-child .img-fluid {
+        border-radius: 15px 0 0 15px; /* Rounded corners for image on left side for larger screens */
+    }
 }

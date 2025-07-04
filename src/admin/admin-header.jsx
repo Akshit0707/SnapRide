@@ -4,141 +4,152 @@ import {
   Container,
   Row,
   Col,
-  Button,
   NavDropdown,
+  Nav,
 } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import useAuthentication from "../hooks/useAuthentication";
-import Nav from "react-bootstrap/Nav";
-import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
-
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "../config/firebase";
+import useAuthentication from "../hooks/useAuthentication"; // Adjust path if necessary
+import { Link, useLocation } from "react-router-dom";
 import {
-  demoBrands,
-  demoCars,
-  demoLocations,
-  demoModels,
-} from "../utils/demo-content";
+  FaUsers,
+  FaMapMarkerAlt,
+  FaClipboardList,
+  FaUserCircle,
+  FaCarSide, // FaCarSide is used only for the 'Vehicle' nav item now
+} from "react-icons/fa";
 
 const AdminHeader = () => {
   const user = useSelector(({ UserSlice }) => UserSlice.user);
-
   const { signOutCall } = useAuthentication();
+  const location = useLocation();
+
   const handleLogout = async () => {
     await signOutCall();
   };
 
-  const handleReloadDemoContent = () => {
-    Swal.fire({
-      title: "Do you want to return to the default content?",
-      html: `All content will be reset! <br/> (brands, models, cars, locations)`,
-      showCancelButton: true,
-      confirmButtonText: "Reset",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await setDoc(doc(db, "vehicle", "brands"), demoBrands);
-          await setDoc(doc(db, "vehicle", "models"), demoModels);
-          await setDoc(doc(db, "vehicle", "cars"), demoCars);
-          await setDoc(doc(db, "vehicle", "locations"), demoLocations);
+  const userName = user && user.name ? user.name : "Admin";
+  const userEmail = user && user.email ? user.email : "";
+  const userRole = user && user.role ? user.role : "admin";
 
-          Swal.fire("Reloaded!", "", "success").then((result) => {
-            if (result.isConfirmed) {
-              window.location.reload();
-            }
-          });
-        } catch (err) {
-          console.log(err);
-          Swal.fire("Error!", "", "error");
-        }
-      }
-    });
+  const isActive = (path) => {
+    if (path.includes("vehicles")) {
+      return location.pathname.startsWith("/admin/vehicles");
+    }
+    return location.pathname.includes(path);
   };
 
   return (
     <header className="admin-header">
-      <div className="bg-body-tertiary px-2 pt-4 pb-2">
-        <Container>
-          <Row>
-            <Col xs={12} md={6} className="text-center text-sm-start">
-              <h2 className="mt-1 mb-2">
-                <Link as={Link} to="/admin">
-                  EasyDrive Management
-                </Link>
-                <Button
-                  variant="info"
-                  className="my-2 py-1 text-white"
-                  type="button"
-                  onClick={handleReloadDemoContent}
-                >
-                  Reload Demo Content!
-                </Button>
-              </h2>
+      {/* Top header bar - Branding & User Profile */}
+      <div className="admin-header-top">
+        <Container fluid className="px-4">
+          <Row className="align-items-center">
+            {/* Admin Brand (will be visually centered using flexbox tricks on its Col) */}
+            <Col xs={12} md={6} className="d-flex justify-content-center justify-content-md-start">
+              <h3 className="admin-brand-title mb-0">
+                SnapRide Admin Panel
+              </h3>
             </Col>
-            <Col xs={12} md={6}>
-              <Row>
-                <Col xs={8} md={9}>
-                  <h6>
-                    Signed in as: <br />
-                    <label className="text-dark fw-500">{`${user.email} (${user.role})`}</label>
-                  </h6>
-                </Col>
-                <Col xs={4} md={3}>
-                  <Button
-                    variant="outline-danger"
-                    className="mt-2 py-1"
-                    type="button"
-                    onClick={handleLogout}
-                  >
-                    Log out!
-                  </Button>
-                </Col>
-              </Row>
+
+            {/* User Profile Dropdown (aligned to end) */}
+            <Col xs={12} md={6} className="d-flex justify-content-center justify-content-md-end mt-3 mt-md-0">
+              <Nav className="admin-header-user-nav">
+                <NavDropdown
+                  align="end"
+                  title={
+                    <div className="d-flex align-items-center gap-2 text-white">
+                      <FaUserCircle size={24} />
+                      <span className="fw-semibold">{userName}</span>
+                    </div>
+                  }
+                  id="admin-profile-dropdown"
+                  className="admin-profile-dropdown"
+                >
+                  <NavDropdown.ItemText className="dropdown-item-text">
+                    <strong>{userName}</strong>
+                    <br />
+                    <small>{userEmail}</small>
+                    <br />
+                    <small className="text-muted-role">Role: {userRole}</small>
+                  </NavDropdown.ItemText>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={handleLogout}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
             </Col>
           </Row>
         </Container>
       </div>
+
+      {/* Navigation bar - Main Menu */}
       <Navbar
         expand="lg"
-        bg="white"
-        collapseOnSelect
-        data-bs-theme="white"
-        className="rounded-bottom py-2"
+        className="admin-navbar-bottom"
       >
-        <Container>
-          <Navbar.Brand href="#" className="d-block d-lg-none fs-6 ms-3">
-            Admin Menu
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="responsive-admin-navbar-nav" />
-          <Navbar.Collapse id="responsive-admin-navbar-nav">
-            <Nav className="ms-2">
-              <Nav.Link as={Link} to="users" eventKey="i">
+        <Container fluid className="px-4">
+          <Navbar.Toggle aria-controls="admin-navbar-nav" />
+          <Navbar.Collapse id="admin-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link
+                as={Link}
+                to="users"
+                className={`admin-nav-link ${isActive("users") ? "active" : ""}`}
+              >
+                <FaUsers className="me-2 admin-nav-icon" />
                 Users
               </Nav.Link>
-              <NavDropdown title="Vehicle">
-                <NavDropdown.Item as={Link} to="vehicles/brands" eventKey="i">
-                  Brands
+
+              <NavDropdown
+                title={
+                  // Corrected structure for dropdown arrow on the right
+                  <span className="d-flex align-items-center">
+                    <FaCarSide className="admin-nav-icon" /> {/* No me-2 here */}
+                    <span className="ms-2">Vehicle</span> {/* Text with margin */}
+                  </span>
+                }
+                id="admin-vehicle-dropdown"
+                className={`admin-nav-link admin-nav-dropdown ${isActive("vehicles") ? "active" : ""}`}
+              >
+                <NavDropdown.Item as={Link} to="vehicles/brands">
+                  Brands Management
                 </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="vehicles/models" eventKey="i">
-                  Models
+                <NavDropdown.Item as={Link} to="vehicles/models">
+                  Models Management
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item as={Link} to="vehicles/cars" eventKey="i">
-                  Cars
+                <NavDropdown.Item as={Link} to="vehicles/cars">
+                  Vehicle Management
                 </NavDropdown.Item>
               </NavDropdown>
-              <Nav.Link as={Link} to="locations" eventKey="i">
+
+              <Nav.Link
+                as={Link}
+                to="locations"
+                className={`admin-nav-link ${isActive("locations") ? "active" : ""}`}
+              >
+                <FaMapMarkerAlt className="me-2 admin-nav-icon" />
                 Locations
               </Nav.Link>
-            </Nav>
-            <Nav className="ms-lg-3 mt-2 mt-lg-0">
-              <Nav.Link as={Link} to="rentals" eventKey="i">
-                User Rentals
+              <Nav.Link
+                as={Link}
+                to="contact-form"
+                className={`admin-nav-link ${isActive("contact-form") ? "active" : ""}`}
+              >
+                <FaClipboardList className="me-2 admin-nav-icon" />
+                Contact Forms
               </Nav.Link>
-              <Nav.Link as={Link} to="contact-form" eventKey="i">
-                Contact Form
+            </Nav>
+
+            <Nav>
+              <Nav.Link
+                as={Link}
+                to="rentals"
+                className={`admin-nav-link ${isActive("rentals") ? "active" : ""}`}
+              >
+                <FaClipboardList className="me-2 admin-nav-icon" />
+                User Rentals
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>
